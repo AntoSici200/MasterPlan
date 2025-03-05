@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestione Giornata Settimanale a Blocchi (Migliorata)</title>
+    <title>MasterPlan</title>
     <style>
         /* Stili CSS Incorporati - Aggiornati e Migliorati */
         body {
@@ -16,141 +16,189 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Transizione tema fluido */
         }
+.container {
+        background-color: #fff; /* White container */
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Stronger shadow */
+        width: 100%;
+        max-width: 950px; /* Slightly wider max-width */
+        transition: background-color 0.3s ease, color 0.3s ease; /* Transizione tema fluido */
+    }
 
-        .container {
-            background-color: #fff; /* White container */
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Stronger shadow */
-            width: 100%;
-            max-width: 950px; /* Slightly wider max-width */
-        }
+    h1 {
+        text-align: center;
+        color: #343a40;
+        margin-bottom: 30px; /* Increased margin-bottom */
+    }
 
-        h1 {
-            text-align: center;
-            color: #343a40;
-            margin-bottom: 30px; /* Increased margin-bottom */
-        }
+    /* Stili per la vista settimanale - Modificati per chiarezza */
+    #vista-settimanale {
+        margin-top: 20px;
+        overflow-x: auto;
+    }
 
-        /* Stili per la vista settimanale - Modificati per chiarezza */
-        #vista-settimanale {
-            margin-top: 20px;
-            overflow-x: auto;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        transition: border-color 0.3s ease; /* Transizione tema fluido */
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
+    th, td {
+        padding: 10px 14px; /* Slightly increased padding */
+        text-align: center;
+        border: 1px solid #ddd; /* Lighter border */
+        font-size: 0.95rem; /* Slightly larger font size */
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Transizione tema fluido */
+    }
 
-        th, td {
-            padding: 10px 14px; /* Slightly increased padding */
-            text-align: center;
-            border: 1px solid #ddd; /* Lighter border */
-            font-size: 0.95rem; /* Slightly larger font size */
-        }
+    th {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+    }
 
-        th {
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
-        }
+    td {
+        background-color: #fff; /* White table cells */
+        transition: background-color 0.2s ease, color 0.2s ease; /* Added color transition */
+        height: 35px; /* Slightly taller cells */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative; /* For in-place editor positioning */
+    }
 
-        td {
-            background-color: #fff; /* White table cells */
-            transition: background-color 0.2s ease, color 0.2s ease; /* Added color transition */
-            height: 35px; /* Slightly taller cells */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            position: relative; /* For in-place editor positioning */
-        }
+    td:hover {
+        background-color: #f0f0f0; /* Light grey hover */
+    }
 
-        td:hover {
-            background-color: #f0f0f0; /* Light grey hover */
-            cursor: pointer;
-        }
+    td.highlighted {
+        font-weight: bold; /* Example highlight style - can be customized */
+        /* background-color: #e0f7fa; Light cyan for highlight - example, dynamically set in JS */
+    }
 
-        td.highlighted {
-            font-weight: bold; /* Example highlight style - can be customized */
-            /* background-color: #e0f7fa; Light cyan for highlight - example, dynamically set in JS */
-        }
+    /* Style for in-place editor */
+    .cell-editor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        outline: none;
+        font-size: 0.95rem;
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-sizing: border-box;
+        border: 2px solid #007bff; /* Blue border when editing */
+        border-radius: 0; /* Match cell borders */
+        background-color: white; /* Sfondo bianco */
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Transizione tema fluido */
+    }
 
-        /* Style for in-place editor */
-        .cell-editor {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            border: none;
-            box-shadow: none;
-            outline: none;
-            font-size: 0.95rem;
-            text-align: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            box-sizing: border-box;
-            border: 2px solid #007bff; /* Blue border when editing */
-            border-radius: 0; /* Match cell borders */
-            background-color: white; /* Sfondo bianco */
-        }
+    #sincronizza-calendario, #esporta-blocchi, #reset-schedule, #toggle-dark-mode {
+        width: auto; /* Adjust width to content */
+        padding: 10px 20px; /* Standard button padding */
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 15px;
+        font-size: 1rem;
+        transition: background-color 0.2s ease, color 0.3s ease; /* Transizione tema fluido */
+        margin-right: 10px; /* Space between buttons */
+    }
 
-        #sincronizza-calendario, #esporta-blocchi, #reset-schedule {
-            width: auto; /* Adjust width to content */
-            padding: 10px 20px; /* Standard button padding */
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 15px;
-            font-size: 1rem;
-            transition: background-color 0.2s ease;
-            margin-right: 10px; /* Space between buttons */
-        }
+    #sincronizza-calendario:hover {
+        background-color: #0056b3;
+    }
 
-        #sincronizza-calendario:hover {
-            background-color: #0056b3;
-        }
+    #esporta-blocchi:hover {
+        background-color: #ffb300;
+    }
 
-        #esporta-blocchi:hover {
-            background-color: #ffb300;
-        }
+    #reset-schedule:hover {
+        background-color: #dc3545; /* Red for reset */
+    }
 
-        #reset-schedule {
-            background-color: #dc3545; /* Red for reset */
-        }
+    #reset-schedule:hover {
+        background-color: #c82333;
+    }
 
-        #reset-schedule:hover {
-            background-color: #c82333;
-        }
+    .button-container {
+        text-align: right; /* Align buttons to the right */
+        margin-top: 20px;
+    }
 
-        .button-container {
-            text-align: right; /* Align buttons to the right */
-            margin-top: 20px;
-        }
+    .saved-indicator {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.2em;
+        color: green;
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+        pointer-events: none; /* Makes the indicator non-interactive */
+    }
 
-        .saved-indicator {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1.2em;
-            color: green;
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
-            pointer-events: none; /* Makes the indicator non-interactive */
-        }
+    /* Stili per il tema scuro */
+    body.dark-mode {
+        background-color: #121212; /* Sfondo scuro */
+        color: #e0e0e0; /* Testo chiaro */
+    }
+
+    body.dark-mode .container {
+        background-color: #1e1e1e; /* Sfondo scuro per il contenitore */
+        color: #e0e0e0; /* Testo chiaro */
+    }
+
+    body.dark-mode table {
+        border-color: #333; /* Bordi più scuri per la tabella */
+    }
+
+    body.dark-mode th {
+        background-color: #333; /* Intestazione scura */
+        color: #e0e0e0; /* Testo chiaro */
+    }
+
+    body.dark-mode td {
+        background-color: #2d2d2d; /* Celle scure */
+        color: #e0e0e0; /* Testo chiaro */
+    }
+
+    body.dark-mode td:hover {
+        background-color: #444; /* Hover più chiaro */
+    }
+
+    body.dark-mode .cell-editor {
+        background-color: #2d2d2d; /* Sfondo scuro per l'editor */
+        color: #e0e0e0; /* Testo chiaro */
+        border-color: #007bff; /* Bordo blu per l'editor */
+    }
+
+    body.dark-mode button, body.dark-mode #toggle-dark-mode {
+        background-color: #444; /* Bottoni scuri */
+        color: #e0e0e0; /* Testo chiaro */
+    }
+
+    body.dark-mode button:hover, body.dark-mode #toggle-dark-mode:hover {
+        background-color: #555; /* Hover più chiaro per i bottoni */
+    }
 
 
-    </style>
+</style>
+Use code with caution.
 </head>
 <body>
     <div class="container">
-        <h1>Gestione Giornata Settimanale a Blocchi (Migliorata)</h1>
+        <h1>MasterPlan</h1>
         <datalist id="activities-list">
             <!-- Le opzioni verranno aggiunte dinamicamente con JavaScript -->
         </datalist>
@@ -173,247 +221,273 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="button-container">
-            <button id="reset-schedule">Reset Schedule</button>
-            <button id="esporta-blocchi">Esporta Blocchi (JSON)</button>
-            <button id="sincronizza-calendario">Sincronizza con Calendario</button>
-        </div>
+<div class="button-container">
+        <button id="reset-schedule">Reset Schedule</button>
+        <button id="esporta-blocchi">Esporta Blocchi (JSON)</button>
+        <button id="sincronizza-calendario">Sincronizza con Calendario</button>
+        <button id="toggle-dark-mode">Tema Scuro</button> <!-- Pulsante Tema Scuro -->
     </div>
+</div>
 
-    <script>
-        // Script JavaScript Incorporato - Aggiornato e Migliorato
+<script>
+    // Script JavaScript Incorporato - Aggiornato e Migliorato
 
-        document.addEventListener('DOMContentLoaded', function() {
-            generaTabellaSettimanale();
-            caricaBlocchi();
-        });
+    document.addEventListener('DOMContentLoaded', function() {
+        generaTabellaSettimanale();
+        caricaBlocchi();
+        loadDarkModePreference(); // Carica la preferenza del tema scuro all'avvio
+    });
 
-        document.getElementById('sincronizza-calendario').addEventListener('click', function() {
-            // Placeholder per la sincronizzazione con il calendario
-            alert('Funzionalità di sincronizzazione con il calendario non ancora implementata. \n\nIn futuro, questo pulsante potrebbe integrarsi con Google Calendar o altri servizi simili per sincronizzare i tuoi blocchi di tempo.');
-        });
+    document.getElementById('sincronizza-calendario').addEventListener('click', function() {
+        // Placeholder per la sincronizzazione con il calendario
+        alert('Funzionalità di sincronizzazione con il calendario non ancora implementata. \n\nIn futuro, questo pulsante potrebbe integrarsi con Google Calendar o altri servizi simili per sincronizzare i tuoi blocchi di tempo.');
+    });
 
-        document.getElementById('esporta-blocchi').addEventListener('click', function() {
-            esportaBlocchiJSON();
-        });
+    document.getElementById('esporta-blocchi').addEventListener('click', function() {
+        esportaBlocchiJSON();
+    });
 
-        document.getElementById('reset-schedule').addEventListener('click', function() {
-            resetSchedule();
-        });
+    document.getElementById('reset-schedule').addEventListener('click', function() {
+        resetSchedule();
+    });
+
+    document.getElementById('toggle-dark-mode').addEventListener('click', toggleDarkMode); // Event listener per il tema scuro
 
 
-        let pastActivities = []; // Array to store past activities
+    let pastActivities = []; // Array to store past activities
 
-        function salvaBlocchi() {
-            const activities = {};
-            const currentActivities = []; // To collect activities for highlighting
-            document.querySelectorAll('#tabella-settimana td[data-orario]').forEach(cell => {
-                const giorno = cell.dataset.giorno;
-                const orario = cell.dataset.orario;
-                const attivita = cell.textContent.trim();
+    function salvaBlocchi() {
+        const activities = {};
+        const currentActivities = []; // To collect activities for highlighting
+        document.querySelectorAll('#tabella-settimana td[data-orario]').forEach(cell => {
+            const giorno = cell.dataset.giorno;
+            const orario = cell.dataset.orario;
+            const attivita = cell.textContent.trim();
 
-                if (attivita) {
-                    if (!activities[giorno]) {
-                        activities[giorno] = {};
-                    }
-                    activities[giorno][orario] = attivita;
-                    currentActivities.push(attivita); // Collect for highlighting
-                    if (!pastActivities.includes(attivita)) {
-                        pastActivities.push(attivita); // Update past activities list
-                    }
+            if (attivita) {
+                if (!activities[giorno]) {
+                    activities[giorno] = {};
                 }
-            });
-            localStorage.setItem('weeklyActivities', JSON.stringify(activities));
-            localStorage.setItem('pastActivities', JSON.stringify(pastActivities)); // Save past activities
-            highlightIdenticalActivities(currentActivities); // Highlight after saving
+                activities[giorno][orario] = attivita;
+                currentActivities.push(attivita); // Collect for highlighting
+                if (!pastActivities.includes(attivita)) {
+                    pastActivities.push(attivita); // Update past activities list
+                }
+            }
+        });
+        localStorage.setItem('weeklyActivities', JSON.stringify(activities));
+        localStorage.setItem('pastActivities', JSON.stringify(pastActivities)); // Save past activities
+        highlightIdenticalActivities(currentActivities); // Highlight after saving
 
-            // Aggiorna il datalist
-            const datalist = document.getElementById('activities-list');
-            datalist.innerHTML = ''; // Pulisci il datalist esistente
-            pastActivities.forEach(attivita => {
-                const option = document.createElement('option');
-                option.value = attivita;
-                datalist.appendChild(option);
-            });
-        }
-
-
-        function caricaBlocchi() {
-            const activities = JSON.parse(localStorage.getItem('weeklyActivities')) || {};
-            pastActivities = JSON.parse(localStorage.getItem('pastActivities')) || []; // Load past activities
-             // Popola il datalist con le attività passate
-            const datalist = document.getElementById('activities-list');
-            datalist.innerHTML = ''; // Pulisci il datalist esistente
-            pastActivities.forEach(attivita => {
-                const option = document.createElement('option');
-                option.value = attivita;
-                datalist.appendChild(option);
-            });
-            aggiornaVistaSettimanale(activities);
-        }
-
-        function esportaBlocchiJSON() {
-            const activities = JSON.parse(localStorage.getItem('weeklyActivities')) || {};
-            const blocchiJSON = JSON.stringify(activities, null, 2);
-            const blob = new Blob([blocchiJSON], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'attivita_settimanali.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function resetSchedule() {
-            localStorage.removeItem('weeklyActivities');
-            localStorage.removeItem('pastActivities');
-            pastActivities = []; // Clear in-memory past activities
-            aggiornaVistaSettimanale({}); // Clear the table visually
-             // Pulisci il datalist
-            const datalist = document.getElementById('activities-list');
-            datalist.innerHTML = '';
-        }
+        // Aggiorna il datalist
+        const datalist = document.getElementById('activities-list');
+        datalist.innerHTML = ''; // Pulisci il datalist esistente
+        pastActivities.forEach(attivita => {
+            const option = document.createElement('option');
+            option.value = attivita;
+            datalist.appendChild(option);
+        });
+    }
 
 
-        function generaTabellaSettimanale() {
-            const tabellaSettimana = document.getElementById('tabella-settimana');
-            tabellaSettimana.innerHTML = '';
+    function caricaBlocchi() {
+        const activities = JSON.parse(localStorage.getItem('weeklyActivities')) || {};
+        pastActivities = JSON.parse(localStorage.getItem('pastActivities')) || []; // Load past activities
+         // Popola il datalist con le attività passate
+        const datalist = document.getElementById('activities-list');
+        datalist.innerHTML = ''; // Pulisci il datalist esistente
+        pastActivities.forEach(attivita => {
+            const option = document.createElement('option');
+            option.value = attivita;
+            datalist.appendChild(option);
+        });
+        aggiornaVistaSettimanale(activities);
+    }
 
-            const orari = [];
-            for (let ora = 8; ora <= 20; ora++) {
+    function esportaBlocchiJSON() {
+        const activities = JSON.parse(localStorage.getItem('weeklyActivities')) || {};
+        const blocchiJSON = JSON.stringify(activities, null, 2);
+        const blob = new Blob([blocchiJSON], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'attivita_settimanali.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    function resetSchedule() {
+        localStorage.removeItem('weeklyActivities');
+        localStorage.removeItem('pastActivities');
+        pastActivities = []; // Clear in-memory past activities
+        aggiornaVistaSettimanale({}); // Clear the table visually
+         // Pulisci il datalist
+        const datalist = document.getElementById('activities-list');
+        datalist.innerHTML = '';
+    }
+
+
+    function generaTabellaSettimanale() {
+        const tabellaSettimana = document.getElementById('tabella-settimana');
+        tabellaSettimana.innerHTML = '';
+
+        const orari = [];
+        for (let ora = 5; ora <= 21; ora++) {
+            if (ora === 5) {
+                orari.push(`${ora.toString().padStart(2, '0')}:30`);
+            } else {
                 orari.push(`${ora.toString().padStart(2, '0')}:00`);
                 orari.push(`${ora.toString().padStart(2, '0')}:30`);
             }
-            if (20 < 24) {
-                orari.push(`${(20+1).toString().padStart(2, '0')}:00`);
+        }
+
+
+        orari.forEach(orario => {
+            const riga = document.createElement('tr');
+            const cellaOrario = document.createElement('td');
+            cellaOrario.textContent = orario;
+            riga.appendChild(cellaOrario);
+
+            for (let i = 0; i < 7; i++) {
+                const cellaGiorno = document.createElement('td');
+                cellaGiorno.dataset.orario = orario;
+                cellaGiorno.dataset.giorno = i;
+                cellaGiorno.addEventListener('click', (event) => modificaAttivitaCella(event.target)); // Pass event.target
+                riga.appendChild(cellaGiorno);
             }
+            tabellaSettimana.appendChild(riga);
+        });
+    }
 
-            orari.forEach(orario => {
-                const riga = document.createElement('tr');
-                const cellaOrario = document.createElement('td');
-                cellaOrario.textContent = orario;
-                riga.appendChild(cellaOrario);
 
-                for (let i = 0; i < 7; i++) {
-                    const cellaGiorno = document.createElement('td');
-                    cellaGiorno.dataset.orario = orario;
-                    cellaGiorno.dataset.giorno = i;
-                    cellaGiorno.addEventListener('click', (event) => modificaAttivitaCella(event.target)); // Pass event.target
-                    riga.appendChild(cellaGiorno);
+    function aggiornaVistaSettimanale(activities) {
+        const celle = document.querySelectorAll('#tabella-settimana td[data-orario]');
+
+        celle.forEach(cella => {
+            const giorno = cella.dataset.giorno;
+            const orario = cella.dataset.orario;
+            cella.textContent = activities[giorno] && activities[giorno][orario] ? activities[giorno][orario] : '';
+            cella.classList.remove('highlighted'); // Remove highlight class when updating
+            cella.style.backgroundColor = ''; // Clear dynamic background color
+             // Remove saved indicator if present
+            const savedIndicator = cella.querySelector('.saved-indicator');
+            if (savedIndicator) {
+                cella.removeChild(savedIndicator);
+            }
+        });
+
+        const currentActivities = [];
+        celle.forEach(cella => {
+            if (cella.textContent.trim()) {
+                currentActivities.push(cella.textContent.trim());
+            }
+        });
+        highlightIdenticalActivities(currentActivities); // Re-highlight after update
+    }
+
+
+    function modificaAttivitaCella(cella) {
+        const attualeAttivita = cella.textContent.trim();
+
+        const inputElement = document.createElement('input');
+        inputElement.type = 'text';
+        inputElement.value = attualeAttivita;
+        inputElement.classList.add('cell-editor');
+        inputElement.setAttribute('list', 'activities-list');
+        inputElement.maxLength = 50;
+
+        cella.textContent = '';
+        cella.appendChild(inputElement);
+        inputElement.focus();
+        inputElement.select();
+
+        // Aggiungi un feedback visivo
+        const savedIndicator = document.createElement('span');
+        savedIndicator.classList.add('saved-indicator');
+        savedIndicator.textContent = '✔';
+        savedIndicator.style.opacity = '0';
+        cella.appendChild(savedIndicator);
+
+        inputElement.addEventListener('blur', function() {
+            const nuovaAttivita = inputElement.value.trim();
+            cella.textContent = nuovaAttivita;
+            salvaBlocchi();
+
+            // Mostra il feedback visivo
+            savedIndicator.style.opacity = '1';
+            setTimeout(() => {
+                savedIndicator.style.opacity = '0';
+                if (cella.contains(savedIndicator)) {
+                    cella.removeChild(savedIndicator); // Remove indicator from DOM after animation
                 }
-                tabellaSettimana.appendChild(riga);
-            });
-        }
+            }, 1000); // Nascondi il feedback dopo 1 secondo
+        });
+
+        inputElement.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                inputElement.blur();
+            } else if (event.key === 'Escape') {
+                cella.textContent = attualeAttivita;
+                inputElement.blur();
+            }
+        });
+    }
 
 
-        function aggiornaVistaSettimanale(activities) {
-            const celle = document.querySelectorAll('#tabella-settimana td[data-orario]');
+    function getGiornoSettimana(giornoIndex) {
+        const giorni = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
+        return giorni[giornoIndex];
+    }
 
-            celle.forEach(cella => {
-                const giorno = cella.dataset.giorno;
-                const orario = cella.dataset.orario;
-                cella.textContent = activities[giorno] && activities[giorno][orario] ? activities[giorno][orario] : '';
-                cella.classList.remove('highlighted'); // Remove highlight class when updating
-                cella.style.backgroundColor = ''; // Clear dynamic background color
-                 // Remove saved indicator if present
-                const savedIndicator = cella.querySelector('.saved-indicator');
-                if (savedIndicator) {
-                    cella.removeChild(savedIndicator);
+
+    function highlightIdenticalActivities(currentActivities) {
+        const activityCounts = {};
+        currentActivities.forEach(activity => {
+            activityCounts[activity] = (activityCounts[activity] || 0) + 1;
+        });
+
+        const activityColors = {};
+        let colorIndex = 0;
+        const colors = ['#e0f7fa', '#fce4ec', '#fffde7', '#f1f8e9', '#ede7f6', '#e8f5e9', '#eee8aa', '#ffe0b2']; // Example color palette
+
+        document.querySelectorAll('#tabella-settimana td[data-orario]').forEach(cella => {
+            const activityText = cella.textContent.trim();
+            if (activityText && activityCounts[activityText] > 0) { // Highlight only if activity exists and count > 0
+                if (!activityColors[activityText]) {
+                    activityColors[activityText] = colors[colorIndex % colors.length]; // Cycle through colors
+                    colorIndex++;
                 }
-            });
+                cella.style.backgroundColor = activityColors[activityText];
+            } else {
+                cella.style.backgroundColor = ''; // Clear background if no activity or not to be highlighted
+            }
+        });
+    }
 
-            const currentActivities = [];
-            celle.forEach(cella => {
-                if (cella.textContent.trim()) {
-                    currentActivities.push(cella.textContent.trim());
-                }
-            });
-            highlightIdenticalActivities(currentActivities); // Re-highlight after update
+    // Funzione per attivare/disattivare il tema scuro
+    function toggleDarkMode() {
+        const body = document.body;
+        body.classList.toggle('dark-mode'); // Aggiungi/rimuovi la classe dark-mode
+
+        // Salva la preferenza dell'utente in localStorage
+        const isDarkMode = body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDarkMode);
+
+        // Cambia il testo del pulsante
+        const toggleButton = document.getElementById('toggle-dark-mode');
+        toggleButton.textContent = isDarkMode ? 'Tema Chiaro' : 'Tema Scuro';
+    }
+
+    // Carica la preferenza del tema scuro all'avvio
+    function loadDarkModePreference() {
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('toggle-dark-mode').textContent = 'Tema Chiaro';
         }
+    }
 
 
-        function modificaAttivitaCella(cella) {
-            const attualeAttivita = cella.textContent.trim();
-
-            const inputElement = document.createElement('input');
-            inputElement.type = 'text';
-            inputElement.value = attualeAttivita;
-            inputElement.classList.add('cell-editor');
-            inputElement.setAttribute('list', 'activities-list');
-            inputElement.maxLength = 50;
-
-            cella.textContent = '';
-            cella.appendChild(inputElement);
-            inputElement.focus();
-            inputElement.select();
-
-            // Aggiungi un feedback visivo
-            const savedIndicator = document.createElement('span');
-            savedIndicator.classList.add('saved-indicator');
-            savedIndicator.textContent = '✔';
-            savedIndicator.style.opacity = '0';
-            cella.appendChild(savedIndicator);
-
-            inputElement.addEventListener('blur', function() {
-                const nuovaAttivita = inputElement.value.trim();
-                cella.textContent = nuovaAttivita;
-                salvaBlocchi();
-
-                // Mostra il feedback visivo
-                savedIndicator.style.opacity = '1';
-                setTimeout(() => {
-                    savedIndicator.style.opacity = '0';
-                    if (cella.contains(savedIndicator)) {
-                        cella.removeChild(savedIndicator); // Remove indicator from DOM after animation
-                    }
-                }, 1000); // Nascondi il feedback dopo 1 secondo
-            });
-
-            inputElement.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    inputElement.blur();
-                } else if (event.key === 'Escape') {
-                    cella.textContent = attualeAttivita;
-                    inputElement.blur();
-                }
-            });
-        }
-
-
-        function getGiornoSettimana(giornoIndex) {
-            const giorni = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
-            return giorni[giornoIndex];
-        }
-
-
-        function highlightIdenticalActivities(currentActivities) {
-            const activityCounts = {};
-            currentActivities.forEach(activity => {
-                activityCounts[activity] = (activityCounts[activity] || 0) + 1;
-            });
-
-            const activityColors = {};
-            let colorIndex = 0;
-            const colors = ['#e0f7fa', '#fce4ec', '#fffde7', '#f1f8e9', '#ede7f6', '#e8f5e9', '#eee8aa', '#ffe0b2']; // Example color palette
-
-            document.querySelectorAll('#tabella-settimana td[data-orario]').forEach(cella => {
-                const activityText = cella.textContent.trim();
-                if (activityText && activityCounts[activityText] > 0) { // Highlight only if activity exists and count > 0
-                    if (!activityColors[activityText]) {
-                        activityColors[activityText] = colors[colorIndex % colors.length]; // Cycle through colors
-                        colorIndex++;
-                    }
-                    cella.style.backgroundColor = activityColors[activityText];
-                } else {
-                    cella.style.backgroundColor = ''; // Clear background if no activity or not to be highlighted
-                }
-            });
-        }
-
-
-    </script>
-</body>
-</html>
+</script>
