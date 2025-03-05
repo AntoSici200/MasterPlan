@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Mie Citazioni</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f8f1e9;
+            margin: 0;
+            padding: 30px;
+            color: #4a3f35;
+            transition: background-color 0.3s, color 0.3s; /* Transizione per il tema scuro */
+        }
+        body.dark-theme {
+            background-color: #1a1a1a; /* Sfondo scuro */
+            color: #e0e0e0; /* Testo chiaro */
+        }
+        h1 {
+            text-align: center;
+            color: #8b5e34;
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-weight: normal;
+            letter-spacing: 1px;
+            transition: color 0.3s; /* Transizione per il tema scuro */
+        }
+        .dark-theme h1 {
+            color: #c9a66b; /* Colore del titolo nel tema scuro (es. un beige dorato) */
+        }
+        h2 {
+            color: #8b5e34;
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: normal;
+            transition: color 0.3s; /* Transizione per il tema scuro */
+        }
+        .dark-theme h2 {
+            color: #c9a66b; /* Colore dei sottotitoli nel tema scuro */
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #fffcf7;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s, box-shadow 0.3s; /* Transizione per il tema scuro */
+        }
+        .dark-theme .container {
+            background-color: #2a2a2a; /* Sfondo scuro per il contenitore */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Ombra più scura */
+        }
+        .search-section {
+            margin-bottom: 25px;
+            position: relative;
+            display: flex; /* Abilita flexbox */
+            align-items: center; /* Centra verticalmente gli elementi */
+        }
+
+        .search-section input[type="text"] {
+            width: 100%;
+            padding: 12px 40px 12px 40px; /* Aumenta il padding a destra */
+            border: 1px solid #d9c2a7;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%238b5e34" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 12px center;
+            background-size: 18px;
+            transition: border-color 0.3s, background-color 0.3s, color 0.3s; /* Transizione per il tema scuro */
+            color: #4a3f35; /* Colore del testo in tema chiaro */
+        }
+        .dark-theme .search-section input[type="text"] {
+            border-color: #555; /* Bordo più scuro nel tema scuro */
+            background-color: #333; /* Sfondo scuro per input nel tema scuro */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23e0e0e0" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'); /* Icona bianca nel tema scuro */
+            color: #e0e0e0; /* Colore del testo in tema scuro */
+        }
+
+        .search-section input[type="text"]:focus {
+            border-color: #c9a66b;
+            outline: none;
+        }
+        .dark-theme .search-section input[type="text"]:focus {
+            border-color: #c9a66b; /* Mantiene l'accento dorato anche nel tema scuro */
+        }
+
+        .clear-search-button {
+            position: absolute;
+            right: 12px;
+            background: none; /* Rimuovi lo sfondo */
+            border: none; /* Rimuovi il bordo */
+            font-size: 20px;
+            color: #8b5e34;
+            cursor: pointer;
+            opacity: 0.6;
+            padding: 0;
+            margin: 0;
+            outline: none; /* Rimuovi l'outline al focus */
+            box-shadow: none; /* Rimuovi l'ombra */
+            transition: color 0.3s; /* Transizione per il tema scuro */
+        }
+        .dark-theme .clear-search-button {
+            color: #e0e0e0; /* Colore chiaro per la X nel tema scuro */
+        }
+
+        .clear-search-button:hover {
+            opacity: 1; /* Aumenta l'opacità al passaggio del mouse */
+            color: #c9a66b; /* Accento dorato al hover */
+            background: none; /* Assicurati che non ci sia sfondo al passaggio del mouse */
+        }
+        .dark-theme .clear-search-button:hover {
+            color: #c9a66b; /* Accento dorato al hover anche nel tema scuro */
+        }
+
+        .clear-search-button:active {
+            color: #8b5e34; /* Mantieni lo stesso colore al clic */
+            background: none; /* Assicurati che non ci sia sfondo al clic */
+        }
+        .dark-theme .clear-search-button:active {
+            color: #e0e0e0; /* Mantieni il colore chiaro al clic nel tema scuro */
+        }
+
+        .input-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            margin-bottom: 25px;
+            transition: background-color 0.3s, box-shadow 0.3s; /* Transizione per il tema scuro */
+        }
+        .dark-theme .input-section {
+            background-color: #2a2a2a; /* Sfondo scuro per la sezione input */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Ombra più scura */
+        }
+        .import-export-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #d9c2a7;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #fffcf7;
+            transition: border-color 0.3s, background-color 0.3s, color 0.3s; /* Transizione per il tema scuro */
+            color: #4a3f35; /* Colore del testo in tema chiaro */
+        }
+        .dark-theme input[type="text"] {
+            border-color: #555; /* Bordo più scuro nel tema scuro */
+            background-color: #333; /* Sfondo scuro per input nel tema scuro */
+            color: #e0e0e0; /* Colore del testo in tema scuro */
+        }
+        input[type="text"]:focus {
+            border-color: #c9a66b;
+            outline: none;
+        }
+        .dark-theme input[type="text"]:focus {
+            border-color: #c9a66b; /* Mantiene l'accento dorato anche nel tema scuro */
+        }
+        button {
+            background-color: #c9a66b;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s, transform 0.2s, color 0.3s; /* Transizione per il tema scuro */
+        }
+        .dark-theme button {
+            background-color: #c9a66b; /* Mantiene il colore dorato nel tema scuro */
+            color: #4a3f35; /* Cambia il colore del testo per contrasto nel tema scuro */
+        }
+        button:hover {
+            background-color: #b5894e;
+            transform: translateY(-1px);
+        }
+        .dark-theme button:hover {
+            background-color: #b5894e; /* Mantiene l'effetto hover anche nel tema scuro */
+        }
+        .import-export-section input[type="file"] {
+            padding: 5px;
+            font-size: 14px;
+            background-color: #fffcf7; /* Sfondo chiaro per input file */
+            color: #4a3f35; /* Colore testo chiaro per input file */
+            border: 1px solid #d9c2a7; /* Bordo chiaro per input file */
+            border-radius: 8px; /* Bordi arrotondati per input file */
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Transizioni per input file */
+        }
+        .dark-theme .import-export-section input[type="file"] {
+            background-color: #333; /* Sfondo scuro per input file tema scuro */
+            color: #e0e0e0; /* Colore testo scuro per input file tema scuro */
+            border-color: #555; /* Bordo scuro per input file tema scuro */
+        }
+        .quote {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            margin-bottom: 20px;
+            position: relative;
+            transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s; /* Transizione per il tema scuro */
+        }
+        .dark-theme .quote {
+            background-color: #333; /* Sfondo scuro per le citazioni */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Ombra più scura */
+        }
+        .quote:hover {
+            transform: translateY(-2px);
+        }
+        .quote-text {
+            font-style: italic;
+            font-size: 17px;
+            margin: 0 0 8px 0;
+            word-wrap: break-word;
+            max-width: 75%;
+            color: #4a3f35;
+            transition: color 0.3s; /* Transizione per il tema scuro */
+        }
+        .dark-theme .quote-text {
+            color: #e0e0e0; /* Testo chiaro per le citazioni nel tema scuro */
+        }
+        .quote-author {
+            font-size: 15px;
+            color: #7a6b5d;
+            margin: 0;
+            transition: color 0.3s; /* Transizione per il tema scuro */
+        }
+        .dark-theme .quote-author {
+            color: #a8a8a8; /* Colore più chiaro per l'autore nel tema scuro */
+        }
+        .quote-topic {
+            font-size: 13px;
+            color: #a89b8c;
+            margin: 5px 0 0 0;
+            transition: color 0.3s; /* Transizione per il tema scuro */
+        }
+        .dark-theme .quote-topic {
+            color: #888; /* Colore ancora più chiaro per l'argomento nel tema scuro */
+        }
+        .quote-buttons {
+            display: flex; /* Sempre visibili */
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            gap: 8px;
+        }
+        .quote-buttons button {
+            background-color: #d9534f;
+            padding: 6px 10px;
+            font-size: 13px;
+            transition: background-color 0.3s, color 0.3s; /* Transizione per il tema scuro */
+        }
+        .dark-theme .quote-buttons button {
+            color: #fff; /* Testo bianco per pulsanti nel tema scuro */
+        }
+        .quote-buttons button:first-child {
+            background-color: #f4d35e;
+            color: #4a3f35;
+        }
+        .quote-buttons button:hover {
+            background-color: #c9302c;
+        }
+        .quote-buttons button:first-child:hover {
+            background-color: #e0c34e;
+        }
+        .edit-form {
+            display: none;
+            margin-top: 15px;
+            position: relative; /* Necessario per il posizionamento assoluto del pulsante di chiusura */
+        }
+        .edit-form input[type="text"] {
+            margin: 5px 0;
+        }
+        .edit-form button {
+            margin-right: 10px;
+        }
+        .clear-all-section {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+        }
+        .clear-all-section button {
+            background-color: #d9534f;
+            padding: 10px 20px;
+            font-size: 13px;
+            opacity: 0.8;
+            border-radius: 8px;
+            transition: background-color 0.3s; /* Transizione per il tema scuro */
+        }
+        .clear-all-section button:hover {
+            background-color: #c9302c;
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+
+        /* Stili per il tasto tema scuro (aggiunti qui) */
+        #themeToggle {
+            position: fixed; /* Fissa il tasto in una posizione */
+            top: 20px; /* Distanza dal bordo superiore */
+            right: 20px; /* Distanza dal bordo destro */
+            background: none; /* Rimuovi lo sfondo */
+            border: none; /* Rimuovi il bordo */
+            font-size: 24px; /* Dimensione dell'icona */
+            color: #8b5e34; /* Colore dell'icona tema chiaro */
+            cursor: pointer; /* Cambia il cursore al passaggio del mouse */
+            z-index: 1000; /* Assicura che sia sopra altri elementi */
+            transition: color 0.3s ease, transform 0.3s ease; /* Aggiungi transizioni */
+        }
+        .dark-theme #themeToggle {
+            color: #e0e0e0; /* Colore dell'icona tema scuro (bianco/grigio chiaro) */
+        }
+
+        #themeToggle:hover {
+            color: #c9a66b; /* Cambia colore al passaggio del mouse tema chiaro */
+            transform: scale(1.1); /* Effetto di ingrandimento */
+        }
+        .dark-theme #themeToggle:hover {
+            color: #fff; /* Colore bianco al passaggio del mouse tema scuro */
+        }
+
+        #themeToggle:active {
+            transform: scale(0.9); /* Effetto di riduzione al clic */
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            .quote-text {
+                font-size: 15px;
+            }
+            .quote-author {
+                font-size: 13px;
+            }
+            .quote-topic {
+                font-size: 12px;
+            }
+            .import-export-section {
+                flex-direction: column;
+                align-items: center;
+            }
+            .clear-all-section {
+                bottom: 15px;
+                right: 15px;
+            }
+            .quote-buttons {
+                position: relative; /* Cambia da absolute a relative */
+                top: auto;        /* Resetta top */
+                right: auto;      /* Resetta right */
+                margin-top: 10px; /* Aggiunge spazio sopra i pulsanti */
+                justify-content: flex-end; /* Allinea i pulsanti a destra */
+            }
+            .quote-text {
+                max-width: 100%; /* Assicura che il testo occupi tutta la larghezza disponibile */
+            }
+            .clear-search-button {
+                right: 8px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="themeToggle" aria-label="Attiva/disattiva tema scuro">
+        <i class="fas fa-moon"></i> <!-- Icona luna per tema scuro -->
+    </button>
+
+    <div class="container">
+        <h1>Le Mie Citazioni</h1>
+
+        <div class="search-section">
+            <input type="text" id="search" placeholder="Cerca per autore o argomento" onkeyup="searchQuotes()">
+            <button onclick="clearSearch()" class="clear-search-button">×</button>
+        </div>
+
+        <div class="input-section">
+            <h2>Aggiungi Citazione</h2>
+            <input type="text" id="text" placeholder="Inserisci la citazione" maxlength="200">
+            <input type="text" id="author" placeholder="Autore" maxlength="50">
+            <input type="text" id="topic" placeholder="Argomento" maxlength="50">
+            <button onclick="addQuote()">Aggiungi</button>
+        </div>
+
+        <div class="import-export-section">
+            <button onclick="exportQuotes()" aria-label="Esporta citazioni">Esporta Citazioni</button>
+            <input type="file" id="importFile" accept=".json" onchange="importQuotes(event)" aria-label="Importa citazioni">
+        </div>
+
+        <div id="quotesList"></div>
+    </div>
+
+    <div class="clear-all-section">
+        <button onclick="clearAllQuotes()">Elimina Tutte</button>
+    </div>
+
+    <script>
+        let quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+        displayQuotes();
+
+        function showMessage(message, duration = 2000) {
+            const messageDiv = document.createElement('div');
+            messageDiv.style.position = 'fixed';
+            messageDiv.style.bottom = '20px';
+            messageDiv.style.left = '50%';
+            messageDiv.style.transform = 'translateX(-50%)';
+            messageDiv.style.backgroundColor = '#4CAF50';
+            messageDiv.style.color = 'white';
+            messageDiv.style.padding = '10px 20px';
+            messageDiv.style.borderRadius = '5px';
+            messageDiv.style.zIndex = '1000';
+            messageDiv.textContent = message;
+            document.body.appendChild(messageDiv);
+            setTimeout(() => {
+                document.body.removeChild(messageDiv);
+            }, duration);
+        }
+
+        function addQuote() {
+            const text = document.getElementById('text').value;
+            const author = document.getElementById('author').value;
+            const topic = document.getElementById('topic').value;
+            if (text && author && topic) {
+                const isDuplicate = quotes.some(q => q.text === text && q.author === author && q.topic === topic);
+                if (isDuplicate) {
+                    alert('Questa citazione esiste già!');
+                    return;
+                }
+                quotes.push({ text, author, topic });
+                saveQuotes();
+                displayQuotes();
+                clearInputs();
+                showMessage('Citazione aggiunta con successo!');
+            } else {
+                alert('Compila tutti i campi!');
+            }
+        }
+
+        function editQuote(index) {
+            const quoteDiv = document.getElementById(`quote-${index}`);
+            const displayContent = quoteDiv.querySelector('.display-content');
+            const editForm = quoteDiv.querySelector('.edit-form');
+            displayContent.style.display = 'none';
+            editForm.style.display = 'block';
+        }
+
+        function saveEdit(index) {
+            const quoteDiv = document.getElementById(`quote-${index}`);
+            const newText = quoteDiv.querySelector('.edit-text').value;
+            const newAuthor = quoteDiv.querySelector('.edit-author').value;
+            const newTopic = quoteDiv.querySelector('.edit-topic').value;
+            if (newText && newAuthor && newTopic) {
+                quotes[index] = { text: newText, author: newAuthor, topic: newTopic };
+                saveQuotes();
+                displayQuotes();
+                cancelEdit(index); // Chiude il form di modifica dopo il salvataggio
+                showMessage('Citazione modificata con successo!');
+            } else {
+                alert('Compila tutti i campi!');
+            }
+        }
+
+        function cancelEdit(index) {
+            const quoteDiv = document.getElementById(`quote-${index}`);
+            const displayContent = quoteDiv.querySelector('.display-content');
+            const editForm = quoteDiv.querySelector('.edit-form');
+            displayContent.style.display = 'block';
+            editForm.style.display = 'none';
+        }
+
+        function deleteQuote(index) {
+            if (confirm('Sei sicuro di voler eliminare questa citazione?')) {
+                quotes.splice(index, 1);
+                saveQuotes();
+                displayQuotes();
+            }
+        }
+
+        let searchTimeout;
+        function searchQuotes() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const searchTerm = document.getElementById('search').value.toLowerCase();
+                const filteredQuotes = quotes.filter(q =>
+                    q.author.toLowerCase().includes(searchTerm) ||
+                    q.topic.toLowerCase().includes(searchTerm)
+                );
+                displayQuotes(filteredQuotes);
+            }, 300); // Esegui la ricerca dopo 300ms dall'ultima digitazione
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('search');
+            searchInput.value = '';
+            searchQuotes();
+            updateClearButtonVisibility();
+        }
+
+        function updateClearButtonVisibility() {
+            const searchInput = document.getElementById('search');
+            const clearButton = document.querySelector('.clear-search-button');
+            if (searchInput.value.trim() === '') {
+                clearButton.style.display = 'none';
+            } else {
+                clearButton.style.display = 'block';
+            }
+        }
+
+        document.getElementById('search').addEventListener('input', function() {
+            updateClearButtonVisibility();
+        });
+
+        function displayQuotes(filteredQuotes = quotes) {
+            const list = document.getElementById('quotesList');
+            list.innerHTML = '';
+            filteredQuotes.forEach((quote, displayIndex) => {
+                const originalIndex = quotes.findIndex(q =>
+                    q.text === quote.text &&
+                    q.author === quote.author &&
+                    q.topic === quote.topic
+                );
+                const div = document.createElement('div');
+                div.className = 'quote';
+                div.id = `quote-${originalIndex}`;
+                div.innerHTML = `
+                    <div class="display-content">
+                        <p class="quote-text">"${quote.text}"</p>
+                        <p class="quote-author">— ${quote.author}</p>
+                        <p class="quote-topic">${quote.topic}</p>
+                        <div class="quote-buttons">
+                            <button onclick="editQuote(${originalIndex})">Modifica</button>
+                            <button onclick="deleteQuote(${originalIndex})">Elimina</button>
+                        </div>
+                    </div>
+                    <div class="edit-form">
+                        <input type="text" class="edit-text" value="${quote.text}">
+                        <input type="text" class="edit-author" value="${quote.author}">
+                        <input type="text" class="edit-topic" value="${quote.topic}">
+                        <button onclick="saveEdit(${originalIndex})">Salva</button>
+                        <button onclick="cancelEdit(${originalIndex})">Annulla</button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function saveQuotes() {
+            localStorage.setItem('quotes', JSON.stringify(quotes));
+        }
+
+        function clearInputs() {
+            document.getElementById('text').value = '';
+            document.getElementById('author').value = '';
+            document.getElementById('topic').value = '';
+        }
+
+        async function exportQuotes() {
+            if (quotes.length === 0) {
+                alert('Nessuna citazione da esportare!');
+                return;
+            }
+
+            const dataStr = JSON.stringify(quotes, null, 2); // JSON formattato per leggibilità
+
+            try {
+                if (window.showSaveFilePicker) {
+                    // Usa File System Access API moderna
+                    const fileHandle = await window.showSaveFilePicker({
+                        suggestedName: 'citazioni.json',
+                        types: [{
+                            description: 'File JSON',
+                            accept: { 'application/json': ['.json'] },
+                        }],
+                    });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(dataStr);
+                    await writable.close();
+                    showMessage('Citazioni esportate con successo!');
+                } else {
+                    // Fallback: prompt per il nome e download diretto
+                    let fileName = prompt('Inserisci il nome del file (senza estensione):', 'citazioni');
+                    if (!fileName) {
+                        fileName = 'citazioni'; // Default se annullato o vuoto
+                    }
+                    fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '') + '.json'; // Pulizia nome
+                    const blob = new Blob([dataStr], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    showMessage('Citazioni esportate con successo come ' + fileName + '!');
+                }
+            } catch (err) {
+                console.error('Errore durante l\'esportazione:', err);
+                alert('Errore durante l\'esportazione: ' + err.message);
+            }
+        }
+
+        function importQuotes(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                alert('Nessun file selezionato!');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedQuotes = JSON.parse(e.target.result);
+                    if (Array.isArray(importedQuotes)) {
+                        quotes = importedQuotes;
+                        saveQuotes();
+                        displayQuotes();
+                        showMessage('Citazioni importate con successo!');
+                    } else {
+                        alert('Errore: Il file non contiene un elenco valido di citazioni.');
+                    }
+                } catch (error) {
+                    alert('Errore durante l\'importazione: ' + error.message);
+                }
+            };
+            reader.onerror = function() {
+                alert('Errore nella lettura del file!');
+            };
+            reader.readAsText(file);
+        }
+
+        function clearAllQuotes() {
+            if (confirm('Vuoi davvero eliminare tutte le citazioni? Questa azione non può essere annullata.')) {
+                if (confirm('Sei assolutamente sicuro? Tutte le citazioni verranno rimosse!')) {
+                    quotes = [];
+                    saveQuotes();
+                    displayQuotes();
+                    showMessage('Tutte le citazioni sono state eliminate.');
+                }
+            }
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+
+            // Alterna tra tema chiaro e scuro
+            body.classList.toggle('dark-theme');
+
+            // Cambia l'icona in base al tema attivo
+            if (body.classList.contains('dark-theme')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Icona sole per tema chiaro
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Icona luna per tema scuro
+            }
+
+            // Salva la preferenza dell'utente nel localStorage
+            localStorage.setItem('theme', body.classList.contains('dark-theme') ? 'dark' : 'light');
+        }
+
+        // Verifica il tema salvato all'avvio
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Icona sole per tema chiaro
+            } else {
+                body.classList.remove('dark-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Icona luna per tema scuro
+            }
+
+             // Aggiungi event listener al tasto tema scuro SOLO dopo che il DOM è caricato
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+        });
+
+        // Inizializza la visibilità del pulsante all'avvio
+        updateClearButtonVisibility();
+    </script>
+</body>
+</html>
